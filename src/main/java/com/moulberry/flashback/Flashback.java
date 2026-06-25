@@ -160,14 +160,10 @@ public class Flashback {
     public static long worldBorderLerpStartTime = -1L;
 
     private static final KeyMapping.Category category = KeyMapping.Category.register(createIdentifier("keybind"));
-    public static final KeyMapping createMarker1KeyBind = KeyBindingHelper.registerKeyBinding(new KeyMapping("flashback.keybind.create_marker_1",
-        InputConstants.Type.KEYSYM, InputConstants.UNKNOWN.getValue(), category));
-    public static final KeyMapping createMarker2KeyBind = KeyBindingHelper.registerKeyBinding(new KeyMapping("flashback.keybind.create_marker_2",
-        InputConstants.Type.KEYSYM, InputConstants.UNKNOWN.getValue(), category));
-    public static final KeyMapping createMarker3KeyBind = KeyBindingHelper.registerKeyBinding(new KeyMapping("flashback.keybind.create_marker_3",
-        InputConstants.Type.KEYSYM, InputConstants.UNKNOWN.getValue(), category));
-    public static final KeyMapping createMarker4KeyBind = KeyBindingHelper.registerKeyBinding(new KeyMapping("flashback.keybind.create_marker_4",
-        InputConstants.Type.KEYSYM, InputConstants.UNKNOWN.getValue(), category));
+    public static final KeyMapping createMarker1KeyBind = null;
+    public static final KeyMapping createMarker2KeyBind = null;
+    public static final KeyMapping createMarker3KeyBind = null;
+    public static final KeyMapping createMarker4KeyBind = null;
 
     public static final Identifier RECORDING_INFO_DEBUG_SCREEN_ID = createIdentifier("recording_info");
 
@@ -211,6 +207,16 @@ public class Flashback {
         PayloadTypeRegistry.playS2C().register(FlashbackAccurateEntityPosition.TYPE, FlashbackAccurateEntityPosition.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(FlashbackSetBorderLerpStartTime.TYPE, FlashbackSetBorderLerpStartTime.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(FlashbackRawCustomPayload.TYPE, FlashbackRawCustomPayload.STREAM_CODEC);
+    }
+
+    public static void initActions() {
+        ActionRegistry.register(ActionNextTick.INSTANCE);
+        ActionRegistry.register(ActionGamePacket.INSTANCE);
+        ActionRegistry.register(ActionConfigurationPacket.INSTANCE);
+        ActionRegistry.register(ActionCreateLocalPlayer.INSTANCE);
+        ActionRegistry.register(ActionMoveEntities.INSTANCE);
+        ActionRegistry.register(ActionLevelChunkCached.INSTANCE);
+        ActionRegistry.register(ActionAccuratePlayerPosition.INSTANCE);
     }
 
     public void onInitializeClient() {
@@ -258,14 +264,7 @@ public class Flashback {
 
         this.deleteUnusedReplayStates();
 
-        ActionRegistry.register(ActionNextTick.INSTANCE);
-        ActionRegistry.register(ActionGamePacket.INSTANCE);
-        ActionRegistry.register(ActionConfigurationPacket.INSTANCE);
-        ActionRegistry.register(ActionCreateLocalPlayer.INSTANCE);
-        ActionRegistry.register(ActionMoveEntities.INSTANCE);
-        ActionRegistry.register(ActionLevelChunkCached.INSTANCE);
-        ActionRegistry.register(ActionAccuratePlayerPosition.INSTANCE);
-
+        initActions();
         KeyframeRegistry.register(CameraKeyframeType.INSTANCE);
         KeyframeRegistry.register(CameraOrbitKeyframeType.INSTANCE);
         KeyframeRegistry.register(TrackEntityKeyframeType.INSTANCE);
