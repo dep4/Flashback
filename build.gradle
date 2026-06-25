@@ -14,6 +14,7 @@ plugins {
     id 'net.fabricmc.fabric-loom' version '1.15-SNAPSHOT'
     id 'com.gradleup.shadow' version "9.3.0"
     id 'maven-publish'
+    id 'signing'
 }
 
 version = project.mod_version
@@ -206,16 +207,45 @@ project.assemble.dependsOn(mergeShadowWithIncludes)
 publishing {
     publications {
         create("mavenJava", MavenPublication) {
-            artifactId = project.archives_base_name
             from components.java
+            groupId = 'io.github.dep4'
+            artifactId = 'flashback'
+            version = System.getenv("INPUTS_VERSION")
+
+            pom {
+                name = 'flashback'
+                description = 'flashback'
+                url = 'https://github.com/dep4/Flashback'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://apache.org'
+                    }
+                }
+                developers {
+                    developer {
+                        name = 'Flashback developers'
+                    }
+                }
+                scm {
+                    url = 'https://github.com/dep4/Flashback'
+                }
+            }
         }
     }
 
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
     repositories {
-        // Add repositories to publish to here.
-        // Notice: This block does NOT have the same function as the block in the top level.
-        // The repositories here will be used for publishing your artifact, not for
-        // retrieving dependencies.
+        maven {
+            url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            credentials {
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
+            }
+        }
     }
+}
+
+signing {
+    useInMemoryPgpKeys(System.getenv('GPG_KEY'), "")
+    sign publishing.publications.mavenJava
 }
